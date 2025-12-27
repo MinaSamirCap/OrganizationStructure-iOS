@@ -43,7 +43,7 @@ struct HierarchyConnectors: View {
                         }
                     }
                 }
-                .frame(width: 34)
+                .frame(width: 34, height: 80)
             }
             
             // Employee badge with optional vertical connector below
