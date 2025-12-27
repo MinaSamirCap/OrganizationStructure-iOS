@@ -9,7 +9,12 @@ import SwiftUI
 
 struct EmployeeBadge: View {
     let employee: EmployeeUiModel
-    let size: CGFloat = 34
+    let size: CGFloat
+
+    init(employee: EmployeeUiModel, size: CGFloat = 34) {
+        self.employee = employee
+        self.size = size
+    }
 
     private var initials: String {
         let components = employee.name.split(separator: " ")
