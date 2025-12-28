@@ -25,7 +25,7 @@ struct EmployeeDetails: View {
                 icon: "location.fill"
             )
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(minWidth: 0, alignment: .leading)
     }
 }
 

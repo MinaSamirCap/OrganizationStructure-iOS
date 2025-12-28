@@ -24,7 +24,7 @@ struct HierarchicalEmployeeItem: View {
             // Employee details
             EmployeeDetails(employee: employee)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(minWidth: 0,maxWidth: .infinity, alignment: .leading)
     }
 }
 

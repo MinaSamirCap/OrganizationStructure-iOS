@@ -11,19 +11,41 @@ struct OrganizationStructure: View {
     @State private var flattenedEmployees: [FlattenedEmployee] = []
     @State private var scrollViewProxy: ScrollViewProxy?
 
+    private var maxDepth: Int {
+        flattenedEmployees.map { $0.depth }.max() ?? 0
+    }
+
+    private func calculateContentWidth(screenWidth: CGFloat) -> CGFloat {
+        // Each depth level adds 34 points for connectors
+        // Add base width for badge (34) + spacing (12) + content (~300) + padding (32)
+        let connectorWidth = CGFloat(maxDepth) * 34.0
+        let baseWidth: CGFloat = 34 + 12 + 300 + 32
+        return max(screenWidth, connectorWidth + baseWidth)
+    }
+
     var body: some View {
         ScrollViewReader { proxy in
-            ScrollView(.horizontal, showsIndicators: false) {
-                LazyVStack(spacing: 20) {
-                    ForEach(flattenedEmployees) { flattenedEmployee in
-                        HierarchicalEmployeeItem(
-                            employee: flattenedEmployee.item,
-                            depth: flattenedEmployee.depth,
-                            isLastInSiblingGroup: flattenedEmployee.isLastInSiblingGroup
-                        )
+            GeometryReader { geometry in
+                let contentWidth = calculateContentWidth(screenWidth: geometry.size.width)
+                let actualWidth = max(geometry.size.width, contentWidth)
+
+                ScrollView(.horizontal, showsIndicators: false) {
+                    ScrollView(.vertical, showsIndicators: false) {
+                        VStack(spacing: 8) {
+                            ForEach(flattenedEmployees) { flattenedEmployee in
+                                HierarchicalEmployeeItem(
+                                    employee: flattenedEmployee.item,
+                                    depth: flattenedEmployee.depth,
+                                    isLastInSiblingGroup: flattenedEmployee.isLastInSiblingGroup
+                                )
+                                .id(flattenedEmployee.id)
+                            }
+                        }
+                        .padding(.horizontal, 16)
+                        .frame(width: actualWidth, alignment: .leading)
                     }
+                    .frame(width: actualWidth)
                 }
-                .padding(.horizontal, 16)
             }
             .onAppear {
                 scrollViewProxy = proxy
