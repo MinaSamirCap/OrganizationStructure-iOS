@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct EmployeeUiModel: Identifiable, Equatable {
+final class EmployeeUiModel: Identifiable, Equatable {
     let id: String
     let name: String
     let position: String
@@ -36,37 +36,18 @@ struct EmployeeUiModel: Identifiable, Equatable {
         self.doNotDrawDepth = doNotDrawDepth
     }
 
-    // Helper to create mutable copy for doNotDrawDepth modifications
-    func withDoNotDrawDepth(_ depth: [Int]) -> EmployeeUiModel {
-        var copy = self
-        copy.doNotDrawDepth = depth
-        return copy
+    static func == (lhs: EmployeeUiModel, rhs: EmployeeUiModel) -> Bool {
+        lhs.id == rhs.id
     }
 
     // Recursive function to mark depths not to be drawn
-    static func markDepthToBeNotDrawn(model: EmployeeUiModel, depth: Int) -> EmployeeUiModel {
-        var modifiedModel = model
-
+    static func markDepthToBeNotDrawn(model: EmployeeUiModel, depth: Int) {
         if !model.children.isEmpty {
-            var modifiedChildren: [EmployeeUiModel] = []
             for child in model.children {
-                var modifiedChild = child
-                modifiedChild.doNotDrawDepth.append(depth)
-                modifiedChild = markDepthToBeNotDrawn(model: modifiedChild, depth: depth)
-                modifiedChildren.append(modifiedChild)
+                child.doNotDrawDepth.append(depth)
+                markDepthToBeNotDrawn(model: child, depth: depth)
             }
-            modifiedModel = EmployeeUiModel(
-                id: model.id,
-                name: model.name,
-                position: model.position,
-                location: model.location,
-                color: model.color,
-                children: modifiedChildren,
-                doNotDrawDepth: model.doNotDrawDepth
-            )
         }
-
-        return modifiedModel
     }
 }
 

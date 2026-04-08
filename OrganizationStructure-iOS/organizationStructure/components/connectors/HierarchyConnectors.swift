@@ -33,7 +33,9 @@ struct HierarchyConnectors: View {
                         BoxView(width: 34) {
                             ConnectorVerticalLine()
                                 .frame(width: 1, height: 16) // half of badge size
+                                .offset(y: -34)
                         }
+                        let _ = EmployeeUiModel.markDepthToBeNotDrawn(model:employee, depth: depth - 1)
                     } else {
                         // Draw full vertical line or skip
                         BoxView(width: 34) {
