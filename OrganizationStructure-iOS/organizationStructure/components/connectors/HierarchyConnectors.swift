@@ -23,6 +23,7 @@ struct HierarchyConnectors: View {
                         BoxView(size: 34) {
                             ConnectorHorizontalLine()
                                 .frame(width: 34, height: 1)
+                                .offset(y: -17)
                         }
                     }
                     
